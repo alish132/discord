@@ -1,0 +1,37 @@
+- setup nextjs and shadcn
+- add 100% height to html, body and root in globals.css file
+- change font to open_sans in root layout.tsx file
+- prepare file structure (main), (auth)
+- setup clerk (sign-in page, sign-up page, middleware, clerk provider )
+- set darkmode to the application {
+    search dark mode in shadcn website and follow the steps
+}
+- setting prisma with following steps {
+    - run this command "npm i -D prisma"
+    - run this command "npm i @prisma/client"
+    - after that run this command "npx prisma init"
+    - create new project in supabase and get connection string from that
+    - paste that connection string in DATABASE_URL field in .env file 
+    - got an .env file error and solve that error by adding "import "dotenv/config"" in prisma.config.ts file
+    - write models in schema.prisma file
+    - run following command every time when we change schema.prisma file{
+        - run this command "npx prisma generate"
+        - after that run this command "npx prisma db push"
+    }
+}
+- create db.ts file inside lib folder and import PrismaClient from "@/lib/generated/prisma/client"
+- create initial-profile.ts file
+- using initial-profile function in root page.tsx file
+- create initial-modal.tsx file inside components/modals folder. This is a form component for creating new server 
+- implementing file upload functionality on server creation form(initial-modal.tsx) component{
+    - using uploadthing package for handling files
+    - create all necessary files and copy paste code from uploadthing documentation but i make some few changes in code according to my need. Follow uploadthing Next.js App router docs and don't forget to Add UploadThing's Styles which is mention in docs.
+    - make "/api/uploadthing" as public route in middleware.ts file
+    - make API route in /api/uploadthing/route.ts for deleting files from uploadthing when user click in ✖ icon in preview image
+    - make current-profile.ts file for checking whether user is loggedIn or not if yes then return user info and if not then return null
+    - make /api/servers API route for creating server. After setting server name and image when user click create button then this API route is called and new server and nested channels and member is created
+
+}
+
+TODO: remove files from uploadthing when we click on remove icon 
+2:19:49
