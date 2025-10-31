@@ -31,8 +31,8 @@
 -> make DELETE API route in /api/uploadthing/route.ts for deleting files from uploadthing when user click in ✖ icon in preview image
 -> make current-profile.ts file for checking whether user is loggedIn or not if yes then return user info and if not then return null
 -> make /api/servers API route for creating server. After setting server name and image when user click create button then this API route is called and new server and nested channels and member is created.
--> create leftside navigation sidebar
--> implement a feature to create new server when user click on plus icon in left navigation bar{
+-> create left-side navigation bar
+-> implement a feature to create new server when user click on + button in left-side navigation bar{
     - create user-modal-store.ts file inside hooks folder
     - create create-server-modal.ts file inside modals folder
     - create modal-provider.ts file inside providers folder

@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { redirect } from 'next/navigation'
 import InitialModal from '@/components/modals/initial-modal'
 
+// This page is rendered at "/"
 async function page() {
   const profile = await initialProfile()
 
