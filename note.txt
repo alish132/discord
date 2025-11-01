@@ -34,8 +34,24 @@
 -> create left-side navigation bar
 -> implement a feature to create new server when user click on + button in left-side navigation bar{
     - create user-modal-store.ts file inside hooks folder
-    - create create-server-modal.ts file inside modals folder
+    - create create-server-modal.tsx file inside modals folder
     - create modal-provider.ts file inside providers folder
+    - return CreateServerModal component(create-server-modal.tsx) inside modal-provider.tsx file
     - render ModalProvider function of modal-provider.ts file inside root layout file 
     - make a toogle type function in navigation-action.tsx file to open and close the form 
 }
+-> Add invite people/friends feature
+-> Add server setting feature {
+    - Add "editServer" option in modalType inside user-modal-store.ts file
+    - create edit-server-modal.tsx file inside modals folder
+    - return EditServerModal component(came form edit-server-modal.tsx file) inside modal-provider.tsx file
+    - create a `/api/servers/${serverId}` API route for updating the server
+}
+-> Add manage members feature{
+    - Add "members" option in modalType inside user-modal-store.ts file 
+    - create members-modal.tsx file inside modals folder
+    - return MembersModal component(came from members-modal.tsx file) inside modal-provider.tsx file
+    - create a `/api/members/${memberId}?serverId=exmpleid1234` API route for changing members role and kicking member from server
+}
+
+5:04:07
