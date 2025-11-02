@@ -53,5 +53,21 @@
     - return MembersModal component(came from members-modal.tsx file) inside modal-provider.tsx file
     - create a `/api/members/${memberId}?serverId=exmpleid1234` API route for changing members role and kicking member from server
 }
-
-5:04:07
+-> Add create channel feature {
+     - Add "createChannel" option in modalType inside user-modal-store.ts file 
+    - create create-channel-modal.tsx file inside modals folder
+     - return CreateChannelModal component(came from create-channel-modal.tsx file) inside modal-provider.tsx file
+    - create a `/api/channels?serverId=exampple1234` API route for creating channel
+}
+-> Add leave server feature{
+    - Add "leaveServer" option in modalType inside user-modal-store.ts file 
+    - create leave-server-modal.tsx file inside modals folder
+     - return LeaveServerModal component(came from leave-server-modal.tsx file) inside modal-provider.tsx file
+    - create a `/api/servers/leave/${serverId}` API route for leaving the server
+}
+-> Add delete server feature{
+    - Add "deleteServer" option in modalType inside user-modal-store.ts file 
+    - create delete-server-modal.tsx file inside modals folder
+     - return DeleteServerModal component(came from delete-server-modal.tsx file) inside modal-provider.tsx file
+    - create a `/api/servers/delete/${serverId}` API route for deleting the server
+}
