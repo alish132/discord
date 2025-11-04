@@ -71,3 +71,7 @@
      - return DeleteServerModal component(came from delete-server-modal.tsx file) inside modal-provider.tsx file
     - create a `/api/servers/delete/${serverId}` API route for deleting the server
 }
+-> Add search functionality in website {
+    - Write code for search functionality in server-side.tsx file
+    - Add server-search.tsx file inside server folder
+}
