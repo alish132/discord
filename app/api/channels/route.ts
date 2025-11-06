@@ -10,7 +10,6 @@ export async function POST(req: NextRequest){
 
         const {searchParams} = new URL(req.url)
         const serverId = searchParams.get("serverId")
-        console.log(serverId)
 
         if(!profile){
             return new NextResponse("Unauthorized", {status:401})

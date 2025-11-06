@@ -5,6 +5,7 @@ import React from 'react'
 
 function page() {
   const {serverId} = useParams()
+
   return (
     <div>
       This is server {serverId}

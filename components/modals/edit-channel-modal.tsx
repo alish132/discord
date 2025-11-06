@@ -41,7 +41,7 @@ const formSchema = z.object({
     name: z.string().min(1, {
         message: "Channel name is required"
     }).refine(
-        name => name.toLowerCase() !== "general",
+        name => name.trim().toLowerCase() !== "general",
         {
             message: "Channel name cannot be 'general'"
         }
@@ -49,12 +49,12 @@ const formSchema = z.object({
     type: z.enum(ChannelType)
 })
 
-function CreateChannelModal() {
+function EditChannelModal() {
     const { isOpen, onClose, type, data } = useModal()
     const router = useRouter()
-    const isModalOpen = isOpen && type === "createChannel"
-    const {serverId} = useParams()
-    const {channelType} = data
+    const isModalOpen = isOpen && type === "editChannel"
+    const { serverId } = useParams()
+    const { channelType, channel } = data
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -65,24 +65,23 @@ function CreateChannelModal() {
     })
 
     useEffect(() => {
-        if(channelType){
-            form.setValue("type", channelType)
-        } else{
-            form.setValue("type", ChannelType.TEXT)
+        if (channel) {
+            form.setValue("name", channel.name)
+            form.setValue("type", channel.type)
         }
-    }, [channelType, form])
+    }, [channel, form])
 
     const isLoading = form.formState.isSubmitting
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const url = qs.stringifyUrl({
-                url: `/api/channels`,
+                url: `/api/channels/update/${channel?.id}`,
                 query: {
                     serverId: serverId
                 }
             })
-            await axios.post(url, values)
+            await axios.patch(url, values)
 
             form.reset()
             // re-render component
@@ -103,7 +102,7 @@ function CreateChannelModal() {
             <DialogContent className='bg-white text-black p-0 overflow-hidden'>
                 <DialogHeader className='pt-8 px-6'>
                     <DialogTitle className='text-2xl text-center font-bold'>
-                        Create channel
+                        Edit channel
                     </DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
@@ -130,28 +129,28 @@ function CreateChannelModal() {
                                 )}
                             />
                             <FormField
-                            control={form.control}
-                            name='type'
-                            render={({field}) => (
-                                <FormItem>
-                                    <FormLabel >Channel Type</FormLabel>
-                                    <Select disabled={isLoading} onValueChange={field.onChange} defaultValue={field.value}>
-                                        <FormControl className='w-full'>
-                                            <SelectTrigger className='bg-zinc-300/50! border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none'>
-                                            <SelectValue placeholder="Select a channel type" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {Object.values(ChannelType).map((type) => (
-                                                <SelectItem key={type} value={type} className='capitalize'>
-                                                    {type.toLowerCase()}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </FormItem>
-                            )}
-                             />
+                                control={form.control}
+                                name='type'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel >Channel Type</FormLabel>
+                                        <Select disabled={true} onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl className='w-full'>
+                                                <SelectTrigger className='bg-zinc-300/50! border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none'>
+                                                    <SelectValue placeholder="Select a channel type" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {Object.values(ChannelType).map((type) => (
+                                                    <SelectItem key={type} value={type} className='capitalize'>
+                                                        {type.toLowerCase()}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                         <DialogFooter className='bg-gray-100 px-6 py-4'>
                             <Button variant="primary" disabled={isLoading}>
@@ -165,4 +164,4 @@ function CreateChannelModal() {
     )
 }
 
-export default CreateChannelModal
+export default EditChannelModal

@@ -75,3 +75,21 @@
     - Write code for search functionality in server-side.tsx file
     - Add server-search.tsx file inside server folder
 }
+-> Add channels and members list section {
+    - create server-section.tsx file inside server folder. This component show label of the channels like(TEXT CHANNELS, VOICE CHANNELS, VIDEO CHANNELS, MEMBERS)
+    - create server-channel.tsx file inside server folder. This component list all the channels of the server
+    - create server-member.tsx file inside server folder. This component list all the members of the server.
+    - integrating all three newly created component inside server-sidebar.tsx file 
+}
+-> Add channel edit feature{
+    - add "editChannel" option in user-modal-store.ts file
+    - create edit-channel-modal.tsx file inside modals folder
+    - return EditChannelModal component(came from edit-channel-modal.tsx file) inside modal-provider.tsx file
+    - create a "/api/channels/update/${channelId}?serverId=server123" API route for editing the channel
+}
+-> Add channel delete feature{
+    - add "deleteChannel" option in user-modal-store.ts file
+    - create delete-channel-modal.tsx file inside modals folder
+    - return DeleteChannelModal component(came from delete-channel-modal.tsx file) inside modal-provider.tsx file
+    - create a "/api/channels/delete/${channelId}?serverId=server123" API route for deleting the channel
+}
