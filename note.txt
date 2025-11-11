@@ -93,3 +93,9 @@
     - return DeleteChannelModal component(came from delete-channel-modal.tsx file) inside modal-provider.tsx file
     - create a "/api/channels/delete/${channelId}?serverId=server123" API route for deleting the channel
 }
+-> Add Message modal, Conversation modal and DirectMessage modal in schema.prisma file. These modal will use to store all channel and direct messages
+-> create chat-header.tsx file inside components/chat folder 
+-> create mobile-toogle.tsx file for enabling the toggle option in mobile phone
+-> create conversation.ts file for finding or creating new conversation between two members. Which is responsible for direct messages between two members  
+-> create /servers/[serverId]/channels/[channelId]/page.tsx page for channel messages
+-> create /servers/[serverId]/conversation/[memberId]page.tsx page for direct(member to member) messages 
