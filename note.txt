@@ -99,3 +99,20 @@
 -> create conversation.ts file for finding or creating new conversation between two members. Which is responsible for direct messages between two members  
 -> create /servers/[serverId]/channels/[channelId]/page.tsx page for channel messages
 -> create /servers/[serverId]/conversation/[memberId]page.tsx page for direct(member to member) messages 
+
+-> install socket.io and socket.io-client package for realtime communication
+-> modified types.ts for socket
+-> create pages/api/socket/io.ts file in root 
+-> create socket-provider.tsx file inside provider folder
+-> add socket-provider.tsx file in root layout folder
+-> create chat-input.tsx file and integrate that chat-input.tsx file in /servers/[serverId]/channels/[channelId]/page.tsx file
+-> create current-profile-for-pages.ts file inside lib folder to check if user is loggedIn or not for page router 
+-> create messages.ts file inside /pages/api/socket folder
+
+-> Add messageFile as modalType in use-modal-store.ts file
+-> create message-file-modal.tsx file inside modals folder
+-> return message-file-modal.tsx file inside modal-provider.tsx file
+-> fix file-upload.tsx file to preview pdf file 
+-> install emoji-picker-react package 
+-> create emoji-picker.tsx file
+-> integrate emoji-picker.tsx file inside chat-input.tsx file
