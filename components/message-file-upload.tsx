@@ -7,13 +7,15 @@ import Image from 'next/image'
 import { UTApi } from 'uploadthing/server'
 import axios from 'axios'
 
-interface FileUploadProps{
+interface MessageFileUploadProps{
   onChange: (url?: string) => void
   value: string
   endpoint: "messageFile" | "serverImage"
+  setFileType: (type: string) => void
+  fileType: string
 }
-function FileUpload({onChange, value, endpoint, }: FileUploadProps) {
-    const fileType = "image"
+function MessageFileUpload({onChange, value, endpoint, setFileType, fileType}: MessageFileUploadProps) {
+  // const [fileType, setFileType] = React.useState<string | null>(null);
 
   const deleteValue = async (value:any) => {
     onChange("")
@@ -24,7 +26,7 @@ function FileUpload({onChange, value, endpoint, }: FileUploadProps) {
     });
   };
 
-  if(value && fileType === "image"){
+  if(value && fileType !== "pdf"){
     return(
       <div className='relative h-20 w-20'>
         <Image
@@ -40,6 +42,20 @@ function FileUpload({onChange, value, endpoint, }: FileUploadProps) {
     )
   }
 
+  if(value && fileType === "pdf"){
+    return (
+      <div className='relative flex items-center p-2 mt-2 rounded-md bg-background/10'>
+        <FileIcon className='h-10 w-10 fill-indigo-200 stroke-indigo-400' />
+        <a href={value} target='_blank' rel='noopener noreferrer' className='relative ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline wrap-break-word max-w-[400px]'>
+          {value}
+        </a>
+        <button onClick={() => deleteValue(value)} className='bg-rose-500 text-white p-1 rounded-full absolute -top-2 -right-2.5 shadow-sm hover:cursor-pointer hover:bg-rose-600' type='button' >
+          <X className='h-4 w-4'/>
+        </button>
+
+      </div>
+    )
+  }
 
   return (
       <UploadDropzone
@@ -49,12 +65,14 @@ function FileUpload({onChange, value, endpoint, }: FileUploadProps) {
 
         // Detect file type correctly
         const type = file.name?.split(".").pop()
+        setFileType(type!)
 
         return files; // must return files
       }}
 
       onClientUploadComplete={(res) => {
         onChange(res?.[0].ufsUrl)
+        console.log(value)
       }}
       onUploadError={(error: Error) => {
         console.log(error)
@@ -63,4 +81,4 @@ function FileUpload({onChange, value, endpoint, }: FileUploadProps) {
   )
 }
 
-export default FileUpload
+export default MessageFileUpload

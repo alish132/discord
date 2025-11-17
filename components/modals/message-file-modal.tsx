@@ -24,28 +24,32 @@ import {
 } from '@/components/ui/form'
 import { Input } from "@/components/ui/input"
 import { Button } from '../ui/button'
-import FileUpload from '../file-upload'
+import FileUpload from '../message-file-upload'
 import { useRouter } from 'next/navigation'
 import { useModal } from '@/hooks/use-modal-store'
 import qs from "query-string"
+import MessageFileUpload from '../message-file-upload'
 
-const formSchema = z.object({
-    fileUrl: z.string().min(1, {
-        message: "Attachment is required"
-    })
-})
+
 
 function MessageFileModal() {
+    const [fileType, setFileType] = React.useState<string>("");
     const { data, isOpen, type, onClose } = useModal()
-    const {apiUrl, query} = data
+    const { apiUrl, query } = data
     const router = useRouter()
 
     const isModalOpen = isOpen && type === "messageFile"
 
+    const formSchema = z.object({
+        fileUrl: z.string().min(1, {
+            message: "Attachment is required",
+        }),
+    })
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            fileUrl: ""
+            fileUrl: "",
         }
     })
 
@@ -62,7 +66,8 @@ function MessageFileModal() {
                 url: apiUrl || "",
                 query: query
             })
-            await axios.post(url, {...values, content: values.fileUrl})
+            
+            await axios.post(url, { ...values, content: values.fileUrl, contentType: fileType })
 
             form.reset()
             // re-render component
@@ -95,10 +100,12 @@ function MessageFileModal() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <FileUpload
+                                                <MessageFileUpload
                                                     endpoint="messageFile"
                                                     value={field.value}
                                                     onChange={field.onChange}
+                                                    fileType={fileType}
+                                                    setFileType={setFileType}
                                                 />
                                             </FormControl>
                                         </FormItem>
@@ -106,7 +113,7 @@ function MessageFileModal() {
                                 />
                             </div>
 
-                            
+
                         </div>
                         <DialogFooter className='bg-gray-100 px-6 py-4'>
                             <Button variant="primary" disabled={isLoading}>

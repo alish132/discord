@@ -11,8 +11,9 @@ export default async function handler(req:NextApiRequest, res: NextApiResponseSe
 
     try {
         const profile = await currentProfileForPages(req)
-        const {content, fileUrl} = req.body
+        const {content, fileUrl, contentType} = req.body
         const {serverId, channelId} = req.query
+        console.log(contentType)
 
         if(!profile){
             return res.status(401).json({error: "Unauthorized"})
@@ -66,6 +67,7 @@ export default async function handler(req:NextApiRequest, res: NextApiResponseSe
         const message = await db.message.create({
             data: {
                 content: content,
+                contentType: contentType,
                 fileUrl: fileUrl,
                 memberId: member.id,
                 channelId: channelId as string,

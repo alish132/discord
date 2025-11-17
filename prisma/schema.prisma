@@ -106,6 +106,7 @@ model Channel {
 model Message {
   id      String @id @default(uuid())
   content String @db.Text
+  contentType String
 
   fileUrl String? @db.Text
 
