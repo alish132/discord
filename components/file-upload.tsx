@@ -1,21 +1,21 @@
 "use client"
 
 import React from 'react'
-import { UploadDropzone,UploadButton } from '@/lib/uploadthing'
+import { UploadDropzone, UploadButton } from '@/lib/uploadthing'
 import { FileIcon, X } from 'lucide-react'
 import Image from 'next/image'
 import { UTApi } from 'uploadthing/server'
 import axios from 'axios'
 
-interface FileUploadProps{
+interface FileUploadProps {
   onChange: (url?: string) => void
   value: string
   endpoint: "messageFile" | "serverImage"
 }
-function FileUpload({onChange, value, endpoint, }: FileUploadProps) {
-    const fileType = "image"
+function FileUpload({ onChange, value, endpoint, }: FileUploadProps) {
+  const fileType = "image"
 
-  const deleteValue = async (value:any) => {
+  const deleteValue = async (value: any) => {
     onChange("")
     await axios.delete("api/uploadthing", {
       data: {
@@ -24,17 +24,17 @@ function FileUpload({onChange, value, endpoint, }: FileUploadProps) {
     });
   };
 
-  if(value && fileType === "image"){
-    return(
+  if (value && fileType === "image") {
+    return (
       <div className='relative h-20 w-20'>
         <Image
-        fill
-        src={value}
-        alt='Image'
-        className='rounded-full'
+          fill
+          src={value}
+          alt='Image'
+          className='rounded-full'
         />
         <button onClick={() => deleteValue(value)} className='bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm hover:cursor-pointer hover:bg-rose-600' type='button' >
-          <X className='h-4 w-4'/>
+          <X className='h-4 w-4' />
         </button>
       </div>
     )
@@ -42,7 +42,7 @@ function FileUpload({onChange, value, endpoint, }: FileUploadProps) {
 
 
   return (
-      <UploadDropzone
+    <UploadDropzone
       endpoint={endpoint}
       onBeforeUploadBegin={(files) => {
         const file = files[0];
@@ -59,7 +59,7 @@ function FileUpload({onChange, value, endpoint, }: FileUploadProps) {
       onUploadError={(error: Error) => {
         console.log(error)
       }}
-       />
+    />
   )
 }
 

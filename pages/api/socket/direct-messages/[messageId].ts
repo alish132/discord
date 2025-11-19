@@ -12,63 +12,44 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponseS
 
     try {
         const profile = await currentProfileForPages(req)
-        const { messageId, channelId, serverId } = req.query
+        const { messageId, conversationId } = req.query
         const { content } = req.body
 
         if (!profile) {
             return res.status(401).json({ error: "Unauthorized request" })
         }
 
-        if (!serverId) {
-            return res.status(400).json({ error: "Server Id is missing" })
+        if (!conversationId) {
+            return res.status(400).json({ error: "Conversation Id is missing" })
         }
 
-        if (!channelId) {
-            return res.status(400).json({ error: "Channel Id is missing" })
+        if (!messageId) {
+            return res.status(400).json({ error: "Message Id is missing" })
         }
 
-        const server = await db.server.findFirst({
+        const conversation = await db.conversation.findFirst({
             where: {
-                id: serverId as string,
-                members: {
-                    some: {
-                        profileId: profile.id
+                id: conversationId as string,
+                OR: [
+                    {
+                        memberOne: {
+                            profileId: profile.id
+                        }
+                    },
+                    {
+                        memberTwo: {
+                            profileId: profile.id
+                        }
                     }
-                }
+                ]
             },
             include: {
-                members: true
-            }
-        })
-
-        if(!server){
-            return res.status(404).json({error: "Server not found"})
-        }
-
-        const channel = await db.channel.findFirst({
-            where: {
-                id: channelId as string,
-                serverId: serverId as string
-            }
-        })
-
-        if(!channel){
-            return res.status(404).json({error: "Channel not found"})
-        }
-
-        const member = server.members.find((member) => member.profileId === profile.id)
-
-        if(!member){
-            return res.status(404).json({error: "Member not found"})
-        }
-
-        let message = await db.message.findFirst({
-            where: {
-                id: messageId as string,
-                channelId: channelId as string
-            },
-            include: {
-                member: {
+                memberOne: {
+                    include: {
+                        profile: true
+                    }
+                },
+                memberTwo: {
                     include: {
                         profile: true
                     }
@@ -76,26 +57,33 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponseS
             }
         })
 
+        if(!conversation){
+            return res.status(404).json({error: "Conversation not found"})
+        }
+
+        const currentMember = conversation.memberOne.profileId === profile.id ? conversation.memberOne : conversation.memberTwo
+
+
+        let message = await db.directMessage.findFirst({
+            where: {
+                id: messageId as string,
+                conversationId: conversationId as string,
+                memberId: currentMember.id
+            },
+        })
+
         if(!message || message.deleted){
             return res.status(404).json({error: "Message not found"})
         }
 
-        const isMessageOwner = message.memberId === member.id
-        const isAdmin = member.role === MemberRole.ADMIN
-        const isModerator = member.role === MemberRole.MODERATOR
-        const canModify = isMessageOwner  || MemberRole.ADMIN || MemberRole.MODERATOR && !message.deleted
-
-        if(!canModify){
-            return res.status(401).json({error: "Unauthorized"})
-        }
 
         if(req.method === "DELETE"){
-            message = await db.message.update({
+            message = await db.directMessage.update({
                 where: {
                     id: messageId as string
                 },
                 data: {
-                    fileUrl: null,
+                    fileUrl: "",
                     content: "This message has been deleted",
                     deleted: true
                 },
@@ -110,13 +98,11 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponseS
         }
 
         if(req.method === "PATCH"){
-            if(!isMessageOwner){
-                return res.status(401).json({error: "Unauthorized"})
-            }
-
-            message = await db.message.update({
+            message = await db.directMessage.update({
                 where: {
-                    id: messageId as string
+                    id: messageId as string,
+                    conversationId: conversationId as string,
+                    memberId: currentMember.id
                 },
                 data: {
                     content: content
@@ -131,7 +117,7 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponseS
             })
         }
 
-        const updateKey = `chat:${channelId}:messages:update`
+        const updateKey = `chat:${conversation.id}:messages:update`
 
         res?.socket?.server?.io?.emit(updateKey, message)
 

@@ -11,65 +11,70 @@ export default async function handler(req:NextApiRequest, res: NextApiResponseSe
 
     try {
         const profile = await currentProfileForPages(req)
-        const {content, fileUrl, contentType} = req.body
-        const {serverId, channelId} = req.query
+        let {content, fileUrl, contentType} = req.body
+        const {conversationId} = req.query
 
+        fileUrl = fileUrl || ""
         if(!profile){
             return res.status(401).json({error: "Unauthorized"})
         }
 
-        if(!serverId){
+        if(!conversationId){
             return res.status(401).json({error: "Server Id is missing"})
         }
-        if(!channelId){
-            return res.status(401).json({error: "Channel Id is missing"})
-        }
+
         if(!content){
             return res.status(401).json({error: "Content is missing"})
         }
 
-        const server = await db.server.findFirst({
+        const conversation = await db.conversation.findFirst({
             where: {
-                id: serverId as string,
-                members: {
-                    some: {
-                        profileId: profile.id
+                id: conversationId as string,
+                OR: [
+                    {
+                        memberOne: {
+                            profileId: profile.id
+                        }
+                    },
+                    {
+                        memberTwo: {
+                            profileId: profile.id
+                        }
                     }
-                },
+                ]
             },
             include: {
-                members: true
+                memberOne: {
+                    include: {
+                        profile: true
+                    }
+                },
+                memberTwo: {
+                    include: {
+                        profile: true
+                    }
+                }
             }
         })
 
-        if(!server){
-            return res.status(404).json({message: "Server not found"})
+        if(!conversation){
+            return res.status(404).json({message: "Conversation not found"})
         }
 
-        const channel = await db.channel.findFirst({
-            where: {
-                id: channelId as string,
-                serverId: serverId as string
-            }
-        })
-
-        if(!channel){
-            return res.status(404).json({message: "Channel not found"})
-        }
-
-        const member = server.members.find((member) => member.profileId === profile.id)
+        const member = conversation.memberOne.profileId === profile.id ? conversation.memberOne : conversation.memberTwo
+        console.log(member)
 
         if(!member){
             return res.status(404).json({message: "Member not found"})
         }
 
-        const message = await db.message.create({
+        const message = await db.directMessage.create({
             data: {
                 content: content,
                 contentType: contentType,
                 fileUrl: fileUrl,
                 memberId: member.id,
-                channelId: channelId as string,
+                conversationId: conversationId as string
             },
             include: {
                 member: {
@@ -80,7 +85,7 @@ export default async function handler(req:NextApiRequest, res: NextApiResponseSe
             }
         })
 
-        const channelKey = `chat:${channelId}:messages`
+        const channelKey = `chat:${conversationId}:messages`
 
         res?.socket?.server?.io?.emit(channelKey, message)
 

@@ -44,6 +44,7 @@ function ChatInput({ apiUrl, query, name, type }: ChatInputProps) {
                 url: apiUrl,
                 query
             })
+            console.log(url)
             await axios.post(url, value)
             form.reset()
             router.refresh()

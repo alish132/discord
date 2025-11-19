@@ -127,10 +127,24 @@
 -> create /api/messages/route.ts file
 -> create chat-item.tsx file inside /components/chat
 -> install "date-fns" package to show the date of messages
-- create /api/sockets/message/[messageId].ts file route for editing and deleting the message
-- also create a modal which open for confirmation when we try to delete message
+- create /api/socket/messages/[messageId].ts file route for editing and deleting the message
+- also create a modal which open for confirmation when we try to delete the message 
+
+-> create use-chat-query.ts file for reatime updates
+-> make some changes in chat-messages.tsx file for realtime message updates
+-> create use-chat-scroll.ts file inside hooks folder for automatically loading previous messages when user scroll up
+-> initgrate use-chat-scroll.ts file inside chat-messages.tsx file. This will help to load previous messages automatically when user scroll up and also when new message arrive then it will automatically scroll to the bottom   
+
+-> create /api/direct-messages API route. This API route is responsible to send all messages of one to one conversation
+-> create /api/socket/direct-messages API route. This route is responsible for creating and saving direct new DirectMessages in database.
+-> create /api/socket/direct-messages/[messageId] API route for editing and deleting the direct messages.
 
 i did not understand why we are creating backend API in two different ways. App Router and pages
 understand how react-hook form work by actually creating a form by yourself
 understand how socket.io is implemented by actually implementing by yourself
 understand how to use tanstack-query 
+understand messages and direct messages API route because they are written in a way to send messages in batch which i did not understand
+fix the message input box because the overflow text is hidden instead of starting new line
+fix socket.io because its realtime update does not work after 2/3 messages
+10:56:05
+11:17:44
