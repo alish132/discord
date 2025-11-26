@@ -6,7 +6,7 @@ import React from 'react'
 
 async function ServerIdLayout({ children, params }: { children: React.ReactNode, params: { serverId: string } }) {
   const profile = await current_profile()
-  const {serverId} = await params
+  const {serverId} = params
 
   if (!profile) {
     return redirect("/sign-in")
