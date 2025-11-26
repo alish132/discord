@@ -66,12 +66,12 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ membe
 }
 
 
-export async function DELETE(req: NextRequest, {params}: {params: {memberId: string}}){
+export async function DELETE(req: NextRequest, context: {params: Promise<{memberId: string}>}){
     try {
         const profile = await current_profile()
         const {searchParams} = new URL(req.url)
         const serverId = searchParams.get("serverId")
-        const {memberId} = await params
+        const {memberId} = await context.params
 
         if (!profile) {
             return new NextResponse("Unauthorized", { status: 401 })
