@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { MemberRole } from "@/lib/generated/prisma/enums";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(req: NextRequest, context: { params: { channelId: string } }) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ channelId: string }> }) {
     try {
         const profile = await current_profile()
 
