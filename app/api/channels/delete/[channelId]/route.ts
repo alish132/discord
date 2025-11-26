@@ -9,7 +9,7 @@ export async function DELETE(req: NextRequest, context: { params: { channelId: s
 
         const { searchParams } = new URL(req.url)
         const serverId = searchParams.get("serverId")
-        const { channelId } = context.params
+        const { channelId } = await context.params
 
         if (!profile) {
             return new NextResponse("Unauthorized", { status: 401 })
