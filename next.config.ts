@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
     domains: [
       "wgkhljpbqk.ufs.sh"
     ]
+  },
+  experimental:{
+    typedRoutes: false
   }
 };
 
