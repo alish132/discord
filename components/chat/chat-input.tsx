@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import * as z from "zod"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -44,8 +44,8 @@ function ChatInput({ apiUrl, query, name, type }: ChatInputProps) {
                 url: apiUrl,
                 query
             })
-            console.log(url)
             await axios.post(url, value)
+
             form.reset()
             router.refresh()
         } catch (error) {

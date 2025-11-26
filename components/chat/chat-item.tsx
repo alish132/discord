@@ -1,7 +1,7 @@
 import { Member, MemberRole, Profile } from '@/lib/generated/prisma/browser'
 import React, { useEffect, useState } from 'react'
 import UserAvatar from '../user-avatar'
-import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from 'lucide-react'
+import { Edit, FileIcon, Play, ShieldAlert, ShieldCheck, Trash, Video } from 'lucide-react'
 import { ActionTooltip } from '../action-tooltip'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
@@ -46,9 +46,9 @@ function ChatItem({ messageId, content, member, timeStamp, fileType, deleted, cu
 
     const [isEditing, setIsEditing] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
-    const {onOpen} = useModal()
+    const { onOpen } = useModal()
     const router = useRouter()
-    
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -56,10 +56,10 @@ function ChatItem({ messageId, content, member, timeStamp, fileType, deleted, cu
             content: content
         }
     })
-    
+
     useEffect(() => {
         const handleKeyDown = (event: any) => {
-            if(event.key === "Escape" || event.keyCode === 27){
+            if (event.key === "Escape" || event.keyCode === 27) {
                 setIsEditing(false)
             }
         }
@@ -94,7 +94,7 @@ function ChatItem({ messageId, content, member, timeStamp, fileType, deleted, cu
     }
 
     const onMemberClick = () => {
-        if(member.id === currentMember.id){
+        if (member.id === currentMember.id) {
             return
         }
         router.push(`/servers/${socketQuery.serverId}/conversation/${member.id}`)
@@ -107,6 +107,10 @@ function ChatItem({ messageId, content, member, timeStamp, fileType, deleted, cu
     const canEditMessage = !deleted && isOwner && !fileUrl
     const isImage = fileType === "png" || fileType === "jpeg"
     const isPDF = fileType === "pdf"
+    const isVideo = fileType === "mp4"
+
+    const videoRef = React.useRef<HTMLVideoElement | null>(null);
+    const [playIcon, setPlayIcon] = useState(true);
 
     return (
         <div className='relative group flex items-center hover:bg-black/5 p-4 transition w-full'>
@@ -133,6 +137,47 @@ function ChatItem({ messageId, content, member, timeStamp, fileType, deleted, cu
                             <Image src={fileUrl!} alt='Image' fill className='object-cover' />
                         </a>
                     )}
+                    {isVideo && (
+                        <div className="relative mt-2 w-60 h-40 rounded-md overflow-hidden bg-black/20 cursor-pointer">
+                            <video
+                                ref={videoRef}
+                                src={fileUrl!}
+                                className="w-full h-full object-cover rounded-md"
+                                controls={!playIcon}
+                                onClick={(e) => {
+                                    e.stopPropagation();       // Prevent outside click closing instantly
+                                    setPlayIcon(true);     // Show controls when clicked
+
+                                    // play the video
+                                    if(videoRef.current){
+                                        videoRef.current.pause()
+                                    }
+                                }}
+                                onEnded={() => {
+                                    setPlayIcon(true)
+                                }}
+                            />
+
+                            {playIcon && (
+                                <div
+                                    className="absolute inset-0 flex items-center justify-center bg-black/30"
+                                    onClick={() => {
+                                        setPlayIcon(false)
+
+                                        if (videoRef.current) {
+                                            videoRef.current.play().catch(() => { });
+                                        }
+                                    }}
+                                >
+                                    {/* Play button overlay */}
+                                    <div className="bg-white text-black rounded-full p-3">
+                                        <Play />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {isPDF && (
                         <div className='relative flex items-center p-2 mt-2 rounded-md bg-background/10'>
                             <FileIcon className='h-10 w-10 fill-indigo-200 stroke-indigo-400' />
@@ -162,7 +207,7 @@ function ChatItem({ messageId, content, member, timeStamp, fileType, deleted, cu
                                             <FormControl>
                                                 <div className='relative w-full'>
                                                     <Input
-                                                    disabled={isLoading}
+                                                        disabled={isLoading}
                                                         className='p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200'
                                                         placeholder='Edited Message'
                                                         {...field}
@@ -191,7 +236,7 @@ function ChatItem({ messageId, content, member, timeStamp, fileType, deleted, cu
                         </ActionTooltip>
                     )}
                     <ActionTooltip label='Delete'>
-                        <Trash onClick={() => onOpen("deleteMessage", {apiUrl: `${socketUrl}/${messageId}`, query: socketQuery})} className='cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition' />
+                        <Trash onClick={() => onOpen("deleteMessage", { apiUrl: `${socketUrl}/${messageId}`, query: socketQuery })} className='cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition' />
                     </ActionTooltip>
                 </div>
             )}

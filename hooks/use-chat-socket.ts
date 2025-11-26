@@ -53,7 +53,9 @@ export const useChatSocket = ({
             })
         })
 
+        // This socket is listening for new messages
         socket.on(addKey, (message: MessageWithMemberWithProfile) => {
+            console.log("Got new message")
             queryClient.setQueryData([queryKey], (oldData: any) => {
                 if(!oldData || !oldData.pages || oldData.pages.length === 0){
                     return {
@@ -87,3 +89,56 @@ export const useChatSocket = ({
 
     }, [queryClient, addKey, queryKey, socket, updateKey])
 }
+
+// export const useChatSocket = ({
+//     addKey,
+//     updateKey,
+//     queryKey
+// }: ChatSocketProps) => {
+//     const { socket } = useSocket();
+//     const queryClient = useQueryClient();
+
+//     useEffect(() => {
+//         if (!socket) return;
+
+//         const handleAdd = (message: MessageWithMemberWithProfile) => {
+//             queryClient.setQueryData([queryKey], (oldData: any) => {
+//                 if (!oldData || !oldData.pages) {
+//                     return { pages: [{ items: [message] }] };
+//                 }
+
+//                 const newPages = [...oldData.pages];
+//                 newPages[0] = {
+//                     ...newPages[0],
+//                     items: [message, ...newPages[0].items]
+//                 };
+
+//                 return { ...oldData, pages: newPages };
+//             });
+//         };
+
+//         const handleUpdate = (message: MessageWithMemberWithProfile) => {
+//             queryClient.setQueryData([queryKey], (oldData: any) => {
+//                 if (!oldData || !oldData.pages) return oldData;
+
+//                 const newPages = oldData.pages.map((page: any) => ({
+//                     ...page,
+//                     items: page.items.map((item: any) =>
+//                         item.id === message.id ? message : item
+//                     )
+//                 }));
+
+//                 return { ...oldData, pages: newPages };
+//             });
+//         };
+
+//         socket.on(addKey, handleAdd);
+//         socket.on(updateKey, handleUpdate);
+
+//         return () => {
+//             socket.off(addKey, handleAdd);
+//             socket.off(updateKey, handleUpdate);
+//         };
+
+//     }, [socket, addKey, updateKey]); // ❌ queryKey removed
+// };

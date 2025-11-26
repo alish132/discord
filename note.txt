@@ -139,12 +139,11 @@
 -> create /api/socket/direct-messages API route. This route is responsible for creating and saving direct new DirectMessages in database.
 -> create /api/socket/direct-messages/[messageId] API route for editing and deleting the direct messages.
 
-i did not understand why we are creating backend API in two different ways. App Router and pages
-understand how react-hook form work by actually creating a form by yourself
-understand how socket.io is implemented by actually implementing by yourself
-understand how to use tanstack-query 
-understand messages and direct messages API route because they are written in a way to send messages in batch which i did not understand
-fix the message input box because the overflow text is hidden instead of starting new line
-fix socket.io because its realtime update does not work after 2/3 messages
-10:56:05
-11:17:44
+-> create new project in liveKit
+-> search livekit nextjs in google and click the first link. All livekit setup steps is provided there
+-> add livekit API secrets to the .env file
+-> create /api/token/route.ts file for livekit setup
+-> create media-room.ts file inside components folder
+-> add more code in /servers/[serverId]/channels/[channelId]/page.tsx file for audio call and video call channels
+-> create chat-video-button.tsx file inside components folder
+-> integrate that chat-video-button.tsx file inside one to one conversation page(/servers/[serverId]/conversation/[memberId])
