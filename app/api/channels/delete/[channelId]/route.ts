@@ -3,13 +3,13 @@ import { db } from "@/lib/db";
 import { MemberRole } from "@/lib/generated/prisma/enums";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(req: NextRequest, { params }: { params: { channelId: string } }) {
+export async function DELETE(req: NextRequest, context: { params: { channelId: string } }) {
     try {
         const profile = await current_profile()
 
         const { searchParams } = new URL(req.url)
         const serverId = searchParams.get("serverId")
-        const { channelId } = await params
+        const { channelId } = context.params
 
         if (!profile) {
             return new NextResponse("Unauthorized", { status: 401 })
