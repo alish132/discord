@@ -1,15 +1,65 @@
+// import ServerSidebar from '@/components/server/server-sidebar'
+// import { current_profile } from '@/lib/current-profile'
+// import { db } from '@/lib/db'
+// import { redirect } from 'next/navigation'
+// import React from 'react'
+
+// async function ServerIdLayout({ children, params }: { children: React.ReactNode, params: { serverId: string } }) {
+//   const profile = await current_profile()
+//   const {serverId} = params
+
+//   if (!profile) {
+//     return redirect("/sign-in")
+//   }
+
+//   const server = await db.server.findFirst({
+//     where: {
+//       id: serverId,
+//       members: {
+//         some: {
+//           profileId: profile.id
+//         }
+//       }
+//     }
+//   })
+
+//   if (!server) {
+//     return redirect("/")
+//   }
+
+//   return (
+//     <div className='h-full'>
+//       <div className='hidden md:flex h-full w-60 z-20 flex-col fixed inset-y-0 '>
+//         <ServerSidebar serverId={serverId} />
+//       </div>
+//       <main className='h-full md:pl-60'>
+//         {children}
+//       </main>
+//     </div>
+//   )
+// }
+
+// export default ServerIdLayout
+
 import ServerSidebar from '@/components/server/server-sidebar'
 import { current_profile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-async function ServerIdLayout({ children, params }: { children: React.ReactNode, params: { serverId: string } }) {
+export default async function ServerIdLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: { serverId: string }
+}) {
+
   const profile = await current_profile()
-  const {serverId} = params
+  const { serverId } = params   // ✅ no await
 
   if (!profile) {
-    return redirect("/sign-in")
+    redirect("/sign-in")
   }
 
   const server = await db.server.findFirst({
@@ -24,7 +74,7 @@ async function ServerIdLayout({ children, params }: { children: React.ReactNode,
   })
 
   if (!server) {
-    return redirect("/")
+    redirect("/")
   }
 
   return (
@@ -39,4 +89,3 @@ async function ServerIdLayout({ children, params }: { children: React.ReactNode,
   )
 }
 
-export default ServerIdLayout
