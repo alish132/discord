@@ -1,11 +1,11 @@
 import { current_profile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { DirectMessage, Message } from "@/lib/generated/prisma/client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const MESSAGE_BATCH = 10
 
-export async function GET(req: NextResponse){
+export async function GET(req: NextRequest){
     try {
         const profile = await current_profile()
         const {searchParams} = new URL(req.url)
