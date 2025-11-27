@@ -4,7 +4,7 @@ import { ChannelType, MemberRole } from "@/lib/generated/prisma/enums";
 // import { ChannelType, MemberRole } from "@/lib/generated/prisma/enums";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(req: NextRequest, {params} : { params: { channelId: string } }) {
+export async function PATCH(req: NextRequest, {params} : { params: Promise<{ channelId: string }> }) {
     try {
         const profile = await current_profile()
     
