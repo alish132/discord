@@ -22,7 +22,7 @@ interface ChatInputProps {
 
 const formSchema = z.object({
     content: z.string().min(1),
-    contentType: z.string().default("text")
+    contentType: z.string()
 })
 
 function ChatInput({ apiUrl, query, name, type }: ChatInputProps) {
@@ -32,7 +32,7 @@ function ChatInput({ apiUrl, query, name, type }: ChatInputProps) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             content: "",
-            contentType: "text"
+            contentType: "text" 
         }
     })
 
