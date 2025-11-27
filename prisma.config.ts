@@ -8,6 +8,13 @@ export default defineConfig({
   },
   engine: "classic",
   datasource: {
-    url: env("DATABASE_URL"),
+    url: process.env.DATABASE_URL!,
   },
 });
+
+
+// export default defineConfig({
+//   database: {
+//     url: process.env.DATABASE_URL!,   // your Supabase/Postgres connection string
+//   },
+// });
