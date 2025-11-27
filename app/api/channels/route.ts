@@ -1,12 +1,12 @@
 import { current_profile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { MemberRole } from "@/lib/generated/prisma/enums";
+import { ChannelType, MemberRole } from "@/lib/generated/prisma/enums";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest){
     try {
         const profile = await current_profile()
-        const {name, type}: {name: string, type:string} = await req.json()
+        const {name, type}: {name: string, type:ChannelType} = await req.json()
 
         const {searchParams} = new URL(req.url)
         const serverId = searchParams.get("serverId")
