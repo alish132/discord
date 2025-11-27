@@ -5,7 +5,7 @@ import {create} from 'zustand'
 export type modalType = "createServer" | "invite" | "editServer" | "members" | "createChannel" | "leaveServer" | "deleteServer" | "deleteChannel" | "editChannel" | "messageFile" | "deleteMessage"
 
 interface ModalData{
-    server?: Server
+    server?: Server | null
     channel?: Channel 
     channelType?: ChannelType,
     apiUrl?: string

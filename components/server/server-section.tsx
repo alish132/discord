@@ -11,7 +11,7 @@ interface ServerSectionProps {
     role?: MemberRole
     sectionType: "channels" | "members"
     channelType?: ChannelType
-    server?: ServerWithMemberWithProfile
+    server?: ServerWithMemberWithProfile | null
 }
 
 function ServerSection({ label, role, sectionType, channelType, server }: ServerSectionProps) {
