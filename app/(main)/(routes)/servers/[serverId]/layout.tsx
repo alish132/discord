@@ -56,7 +56,7 @@ export default async function ServerIdLayout({
 }) {
 
   const profile = await current_profile()
-  const { serverId } = params   // ✅ no await
+  const { serverId } = await params   // ✅ no await
 
   if (!profile) {
     redirect("/sign-in")

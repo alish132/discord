@@ -2,7 +2,7 @@ import { current_profile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(req: NextRequest, context: { params: Promise<{ memberId: string }> }) {
+export async function PATCH(req: NextRequest, {params}: { params: { memberId: string }}) {
     try {
         const profile = await current_profile()
 
@@ -11,7 +11,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ membe
         const serverId = searchParams.get("serverId")
 
         const { role } = await req.json()
-        const { memberId } = await context.params
+        const { memberId } = await params
 
         if (!profile) {
             return new NextResponse("Unauthorized", { status: 401 })
@@ -66,12 +66,12 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ membe
 }
 
 
-export async function DELETE(req: NextRequest, context: {params: Promise<{memberId: string}>}){
+export async function DELETE(req: NextRequest, {params}: {params: {memberId: string}}){
     try {
         const profile = await current_profile()
         const {searchParams} = new URL(req.url)
         const serverId = searchParams.get("serverId")
-        const {memberId} = await context.params
+        const {memberId} = await params
 
         if (!profile) {
             return new NextResponse("Unauthorized", { status: 401 })

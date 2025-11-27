@@ -3,10 +3,10 @@ import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import {v4 as uuidv4} from "uuid"
 
-export async function PATCH(req: NextRequest, context: {params: Promise<{serverId: string}>}){
+export async function PATCH(req: NextRequest, {params}: {params: {serverId: string}}){
     try {
         const profile = await current_profile()
-        const {serverId} = await context.params
+        const {serverId} = await params
 
         if(!profile){
             return new NextResponse("Unauthorized", {status: 401})

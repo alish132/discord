@@ -2,10 +2,10 @@ import { current_profile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(req: NextRequest, context: { params: Promise<{ serverId: string }> }) {
+export async function DELETE(req: NextRequest, {params}: { params: { serverId: string } }) {
     try {
         const profile = await current_profile()
-        const { serverId } = await context.params
+        const { serverId } = await params
 
         if (!profile) {
             return new NextResponse("Unauthorized", { status: 401 })

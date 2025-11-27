@@ -1,16 +1,16 @@
 import { current_profile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { ChannelType } from "@/lib/generated/prisma/enums";
+import { ChannelType, MemberRole } from "@/lib/generated/prisma/enums";
 // import { ChannelType, MemberRole } from "@/lib/generated/prisma/enums";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(req: NextRequest, context : { params: Promise<{ channelId: string }> }) {
+export async function PATCH(req: NextRequest, {params} : { params: { channelId: string } }) {
     try {
         const profile = await current_profile()
     
         const { searchParams } = new URL(req.url)
         const serverId = searchParams.get("serverId")
-        const { channelId } = await context.params
+        const { channelId } = await params
         const {name, type}:{name:string, type: ChannelType} = await req.json()
     
         if (!profile) {
