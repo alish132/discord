@@ -53,7 +53,7 @@ function CreateChannelModal() {
     const { isOpen, onClose, type, data } = useModal()
     const router = useRouter()
     const isModalOpen = isOpen && type === "createChannel"
-    const {serverId} = useParams()
+    const serverId = useParams<{serverId: string}>()
     const {channelType} = data
 
     const form = useForm({
@@ -79,7 +79,7 @@ function CreateChannelModal() {
             const url = qs.stringifyUrl({
                 url: `/api/channels`,
                 query: {
-                    serverId: serverId
+                    serverId: serverId?.serverId
                 }
             })
             await axios.post(url, values)
