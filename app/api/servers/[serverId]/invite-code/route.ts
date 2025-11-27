@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import {v4 as uuidv4} from "uuid"
 
-export async function PATCH(req: NextRequest, {params}: {params: {serverId: string}}){
+export async function PATCH(req: NextRequest, {params}: {params: Promise<{serverId: string}>}){
     try {
         const profile = await current_profile()
         const {serverId} = await params

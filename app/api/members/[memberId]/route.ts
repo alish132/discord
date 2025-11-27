@@ -2,7 +2,7 @@ import { current_profile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(req: NextRequest, {params}: { params: { memberId: string }}) {
+export async function PATCH(req: NextRequest, {params}: { params: Promise<{ memberId: string }>}) {
     try {
         const profile = await current_profile()
 
@@ -66,7 +66,7 @@ export async function PATCH(req: NextRequest, {params}: { params: { memberId: st
 }
 
 
-export async function DELETE(req: NextRequest, {params}: {params: {memberId: string}}){
+export async function DELETE(req: NextRequest, {params}: {params: Promise<{memberId: string}>}){
     try {
         const profile = await current_profile()
         const {searchParams} = new URL(req.url)
