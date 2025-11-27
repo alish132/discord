@@ -51,4 +51,5 @@ export async function POST(req: NextRequest){
         console.log("[CREATE_CHANNEL_POST]", error)
         return new NextResponse("Internal Error", {status:500})
     }
+
 }
