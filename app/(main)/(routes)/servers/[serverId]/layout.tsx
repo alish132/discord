@@ -52,7 +52,7 @@ export default async function ServerIdLayout({
   params,
 }: {
   children: React.ReactNode
-  params: { serverId: string }
+  params: Promise<{ serverId: string }>
 }) {
 
   const profile = await current_profile()
