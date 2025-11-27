@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from "@/components/ui/input"
 import { Button } from '../ui/button'
-import FileUpload from '../message-file-upload'
+import FileUpload from '../file-upload'
 import { useRouter } from 'next/navigation'
 import { useModal } from '@/hooks/use-modal-store'
 

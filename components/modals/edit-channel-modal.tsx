@@ -53,7 +53,7 @@ function EditChannelModal() {
     const { isOpen, onClose, type, data } = useModal()
     const router = useRouter()
     const isModalOpen = isOpen && type === "editChannel"
-    const { serverId } = useParams()
+    const serverId  = useParams<{serverId: string}>()
     const { channelType, channel } = data
 
     const form = useForm({
@@ -78,7 +78,7 @@ function EditChannelModal() {
             const url = qs.stringifyUrl({
                 url: `/api/channels/update/${channel?.id}`,
                 query: {
-                    serverId: serverId
+                    serverId: serverId?.serverId
                 }
             })
             await axios.patch(url, values)
